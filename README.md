@@ -1,6 +1,6 @@
 <div align="center">
 
-# STEAM <img src="./figures/steam_icon.png" alt="steam icon" height="30" style="vertical-align: top;"> : Simple Translation-Enhanced Approach for Multilingual Watermarking: Simple Translation-Enhanced Approach for Multilingual Watermarking
+# STEAM <img src="./figures/steam_icon.png" alt="steam icon" height="30" style="vertical-align: top;">: Simple Translation-Enhanced Approach for Multilingual Watermarking
 
 [![arXiv](https://img.shields.io/badge/arXiv-2510.18019-b31b1b.svg)](https://arxiv.org/abs/2510.18019)</br>
 <a href="https://www.linkedin.com/in/asim-mohamed-9a2047135/"><b>Asim Mohamed</b></a>, <a href="https://scholar.google.com/citations?user=Jt4OYwMAAAAJ&hl=fr"><b>Martin Gubri</b></a></br>
