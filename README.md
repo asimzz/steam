@@ -1,10 +1,66 @@
-# STEAM: Simple Translation-Enhanced Approach for Multilingual Watermarking
+<div align="center">
 
-Official implementation of **"Is Multilingual LLM Watermarking Truly Multilingual? A Simple Back-Translation Solution"**.
+# STEAM <img src="./figures/steam_icon.png" alt="steam icon" height="30" style="vertical-align: top;"> : Simple Translation-Enhanced Approach for Multilingual Watermarking: Simple Translation-Enhanced Approach for Multilingual Watermarking
+
+[![arXiv](https://img.shields.io/badge/arXiv-2510.18019-b31b1b.svg)](https://arxiv.org/abs/2510.18019)</br>
+<a href="https://www.linkedin.com/in/asim-mohamed-9a2047135/"><b>Asim Mohamed</b></a>, <a href="https://scholar.google.com/citations?user=Jt4OYwMAAAAJ&hl=fr"><b>Martin Gubri</b></a></br>
+African Institute for Mathematical Sciences (AIMS), Parameter Lab
+
+---
+
+</div>
+
+Official implementation of [**"Is Multilingual LLM Watermarking Truly Multilingual? A Simple Back-Translation Solution"**](https://arxiv.org/abs/2510.18019).
 
 In this work, we introduce STEAM (Simple Translation-Enhanced Approach for Multilingual watermarking), a novel defense mechanism designed to enhance the robustness of LLM watermarks against translation-based attacks
 
 ---
+
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [1. Motivation](#1-motivation)
+  - [2. STEAM](#2-steam-)
+- [Installation](#installation)
+- [Basic Workflow](#basic-workflow)
+  - [Categories](#categories)
+- [Code Structure](#code-structure)
+- [Core Components](#core-components)
+  - [1. Text Generation (`gen.py`)](#1-text-generation-genpy-)
+  - [2. Watermark Detection (`detect.py`)](#2-watermark-detection-detectpy)
+  - [3. Evaluation (`eval_detection.py`)](#3-evaluation-eval_detectionpy)
+- [Evaluation Workflow](#evaluation-workflow)
+- [Configuration](#configuration)
+- [Cite](#cite)
+
+## Overview
+
+### 1. Motivation
+
+<p align="center">
+  <img src="./figures/teaser_diagram.jpg" alt="STEAM icon" height="220" style="vertical-align: middle;"/>
+  &nbsp;&nbsp;&nbsp;
+  <img src="./figures/teaser_plot.jpg" alt="X-SIR icon" height="220" style="vertical-align: middle;"/>
+</p>
+
+> Existing multilingual watermarking methods, such as X-SIR, claim cross-lingual robustness but have been tested almost exclusively on high-resource languages. When evaluated across a wider range of languages, these methods fail to maintain watermark strength under translation attacks—especially for medium- and low-resource languages like Tamil or Bengali.
+>
+> This degradation arises because semantic clustering (grouping equivalent words like “house–maison–casa”) depends heavily on tokenizer coverage: languages with fewer full-word tokens lose semantic alignment, making watermarks fragile to translation.
+>
+> These findings reveal that current multilingual watermarking is not truly multilingual, as robustness collapses when token coverage decreases or when text is translated into underrepresented languages
+
+### 2. STEAM <img src="./figures/steam_icon.png" alt="steam icon" height="20" style="vertical-align: top;">
+
+![steam-icon](./figures/steam_v3.jpg)
+
+> STEAM addresses this limitation with a simple, detection-time defense that uses multilingual back-translation to recover watermark signals lost during translation.
+>
+> Given a suspect text, STEAM translates it back into multiple supported languages, evaluates each version using a standard watermark detector (e.g., KGW), applies language-specific z-score normalization, and takes the maximum normalized score as the decisive signal.
+> This process effectively restores watermark strength regardless of language or tokenizer. Across 17 diverse languages, STEAM achieves up to +0.33 AUC and +64.6 percentage-point TPR@1% gains over prior methods, remaining robust even under translator mismatches and multi-step translation attacks.
+>
+> In essence, STEAM provides a model-agnostic, non-invasive, and retroactively extensible defense that ensures fair watermark detection across high-, medium-, and low-resource languages.
 
 ## Installation
 
@@ -206,3 +262,19 @@ Edit `evaluation/common/config.sh` and `evaluation/common/utils.sh` to change:
 - Generation parameters
 
 ---
+
+## Cite
+
+If you find our work useful, please consider citing it:
+
+```bibtex
+@misc{mohamed2025multilingualllmwatermarkingtruly,
+      title={Is Multilingual LLM Watermarking Truly Multilingual? A Simple Back-Translation Solution},
+      author={Asim Mohamed and Martin Gubri},
+      year={2025},
+      eprint={2510.18019},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2510.18019},
+}
+```
