@@ -12,11 +12,9 @@ African Institute for Mathematical Sciences (AIMS), Parameter Lab
 
 Official implementation of [**"Is Multilingual LLM Watermarking Truly Multilingual? A Simple Back-Translation Solution"**](https://arxiv.org/abs/2510.18019).
 
-In this work, we introduce STEAM (Simple Translation-Enhanced Approach for Multilingual watermarking), a novel defense mechanism designed to enhance the robustness of LLM watermarks against translation-based attacks
+In this work, we introduce STEAM (Simple Translation-Enhanced Approach for Multilingual watermarking), a novel defense mechanism designed to enhance the robustness of LLM watermarks against translation-based attacks.
 
----
-
----
+The work was supported by [Parameter Lab](https://parameterlab.de), which provided the compute resources and covered the API costs of large language models.
 
 ## Table of Contents
 
