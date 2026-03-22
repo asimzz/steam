@@ -1,0 +1,39 @@
+[project]
+name = "steam"
+version = "0.1.0"
+description = "STEAM: Search-based Translation-Enhanced Approach for Multilingual Watermarking"
+readme = "README.md"
+requires-python = ">=3.10,<3.11"
+dependencies = [
+    "torch==2.1.2",
+    "transformers>=4.51",
+    "accelerate>=1.6",
+    "datasets>=4.2",
+    "sentence-transformers>=2.4",
+    "sentencepiece>=0.2",
+    "tokenizers>=0.21",
+    "deep-translator>=1.11",
+    "openai>=1.0",
+    "langcodes>=3.5",
+    "language-data>=1.3",
+    "numpy==1.26.4",
+    "scipy>=1.12",
+    "scikit-learn>=1.6",
+    "pandas>=2.2",
+    "matplotlib>=3.10",
+    "seaborn>=0.13",
+    "tqdm>=4.67",
+    "networkx>=3.4",
+    "nltk>=3.8",
+    "spacy>=3.7",
+    "tiktoken>=0.6",
+    "pyvis>=0.3",
+    "python-dotenv>=1.1",
+    "safetensors>=0.5",
+    "pyyaml>=6.0",
+    "requests>=2.32",
+    "regex>=2024.11",
+    "jieba>=0.42",
+    "opencc-python-reimplemented>=0.1.7",
+    "botorch>=0.16.1",
+]

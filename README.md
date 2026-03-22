@@ -88,19 +88,19 @@ Highlights:
 
 ## Installation
 
-This project requires **Python 3.10.17**.
+This project requires **Python 3.10** and [**uv**](https://docs.astral.sh/uv/) for dependency management.
 
 ### 1. Create and activate a virtual environment
 
 ```bash
-python3.10 -m venv .venv
+uv venv --python 3.10
 source .venv/bin/activate
 ```
 
 ### 2. Install dependencies
 
 ```bash
-pip install -r requirements.txt
+uv sync
 ```
 
 ## Code Structure
