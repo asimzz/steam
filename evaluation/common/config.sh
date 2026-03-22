@@ -18,6 +18,9 @@ MODEL_ABBRS=(
 WATERMARK_METHODS=("xsir" "xkgw")
 SEEDS=(0 42 123)
 
+# Translators (used as attackers and defenders)
+TRANSLATORS=("google" "deepseek" "gpt4o")
+
 
 DATA_DIR="$WORK_DIR/data"
 GEN_DIR="$WORK_DIR/evaluation/gen"
