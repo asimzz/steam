@@ -49,7 +49,7 @@ The work was supported by [Parameter Lab](https://parameterlab.de), which provid
 <p align="center">
   <img src="./figures/teaser_diagram.jpg" alt="STEAM icon" height="220" style="vertical-align: middle;"/>
   &nbsp;&nbsp;&nbsp;
-  <img src="./figures/teaser_plot.jpg" alt="X-SIR icon" height="220" style="vertical-align: middle;"/>
+  <img src="./figures/teaser_plot.png" alt="X-SIR icon" height="220" style="vertical-align: middle;"/>
 </p>
 
 > Existing multilingual watermarking methods, such as X-SIR, claim cross-lingual robustness but have been tested almost exclusively on high-resource languages. When evaluated across a wider range of languages, these methods fail to maintain watermark strength under translation attacks — especially for medium- and low-resource languages like Tamil or Bengali.
@@ -74,12 +74,13 @@ The work was supported by [Parameter Lab](https://parameterlab.de), which provid
 
 Average gains over semantic clustering methods across 17 languages (3 models, 3 seeds):
 
-| Comparison | Δ AUC | Δ TPR@1% |
-|---|---|---|
-| STEAM vs X-SIR | **+0.25** | **+44.0%p** |
+| Comparison     | Δ AUC      | Δ TPR@1%    |
+| -------------- | ---------- | ----------- |
+| STEAM vs X-SIR | **+0.25**  | **+44.0%p** |
 | STEAM vs X-KGW | **+0.216** | **+30.7%p** |
 
 Highlights:
+
 - Average AUC above **0.965** across all language categories (high, medium, low resource)
 - Largest gains on **Tamil** (+0.41 AUC) and **Hindi** (+58.8%p TPR@1%)
 - Robust to **translator mismatch**: all 9 attacker-defender pairs achieve AUC > 0.94
@@ -169,11 +170,11 @@ bash evaluation/scripts/evaluate_detection_translate.sh new_supported
 
 ### Categories
 
-| Category             | Languages | Description |
-|---|---|---|
+| Category             | Languages                                                                         | Description                                                   |
+| -------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------- |
 | `new_supported`      | 17 languages (fr, de, it, es, pt, pl, nl, ru, hi, ko, ja, bn, fa, vi, iw, uk, ta) | Main evaluation set spanning high-, medium-, and low-resource |
-| `original_supported` | en, fr, de, zh, ja | Original X-SIR supported languages |
-| `unsupported`        | it, es, pt, pl, nl, hr, cs, da, ko | Languages not in semantic clustering dictionaries |
+| `original_supported` | en, fr, de, zh, ja                                                                | Original X-SIR supported languages                            |
+| `unsupported`        | it, es, pt, pl, nl, hr, cs, da, ko                                                | Languages not in semantic clustering dictionaries             |
 
 Languages for each category are configured in `evaluation/common/languages.sh`.
 
@@ -200,6 +201,7 @@ bash evaluation/scripts/run_steam.sh new_supported
 ```
 
 This runs `steam/detector.py` for each model × seed × watermark method × language, producing:
+
 - `mc4.<lang>.bo.z_score.jsonl` — BO-optimised z-scores for watermarked texts
 - `mc4.<lang>.bo.hum.z_score.jsonl` — z-scores for human texts (using the same pivot language)
 
@@ -299,17 +301,17 @@ python evaluation/eval_detection.py \
 
 The STEAM detection module. Contains the Bayesian Optimisation detector and all supporting components.
 
-| File | Description |
-|---|---|
-| `detector.py` | Main STEAM detector — runs per-text BO to find the best back-translation language |
-| `bayesian_optimization.py` | BO engine using SingleTaskGP surrogate and LogExpectedImprovement acquisition |
-| `language_features.py` | Retrieves 131-D feature vectors (syntax_knn + phonology_knn) from URIEL via lang2vec |
-| `language_codes.py` | ISO 639-1 ↔ ISO 639-3 bidirectional conversion for ~90 languages |
-| `compute_gamma_lang.py` | Computes per-language empirical γ_ℓ from 500 human-written validation texts |
-| `back_translation_languages.txt` | List of 133 candidate probe languages for back-translation |
-| `realtime_backtranslation.py` | Google Translate wrapper with caching and rate limiting |
-| `realtime_deepseek_backtranslation.py` | DeepSeek API translator (drop-in replacement) |
-| `realtime_openai_backtranslation.py` | GPT-4o-mini translator (drop-in replacement) |
+| File                                   | Description                                                                          |
+| -------------------------------------- | ------------------------------------------------------------------------------------ |
+| `detector.py`                          | Main STEAM detector — runs per-text BO to find the best back-translation language    |
+| `bayesian_optimization.py`             | BO engine using SingleTaskGP surrogate and LogExpectedImprovement acquisition        |
+| `language_features.py`                 | Retrieves 131-D feature vectors (syntax_knn + phonology_knn) from URIEL via lang2vec |
+| `language_codes.py`                    | ISO 639-1 ↔ ISO 639-3 bidirectional conversion for ~90 languages                     |
+| `compute_gamma_lang.py`                | Computes per-language empirical γ_ℓ from 500 human-written validation texts          |
+| `back_translation_languages.txt`       | List of 133 candidate probe languages for back-translation                           |
+| `realtime_backtranslation.py`          | Google Translate wrapper with caching and rate limiting                              |
+| `realtime_deepseek_backtranslation.py` | DeepSeek API translator (drop-in replacement)                                        |
+| `realtime_openai_backtranslation.py`   | GPT-4o-mini translator (drop-in replacement)                                         |
 
 ---
 
@@ -317,32 +319,32 @@ The STEAM detection module. Contains the Bayesian Optimisation detector and all 
 
 ### Models
 
-| Model | Abbreviation |
-|---|---|
+| Model                     | Abbreviation   |
+| ------------------------- | -------------- |
 | `meta-llama/Llama-3.2-1B` | `llama-3.2-1B` |
-| `CohereForAI/aya-23-8B` | `aya-23-8B` |
-| `LLaMAX/LLaMAX3-8B` | `llamax3-8B` |
+| `CohereForAI/aya-23-8B`   | `aya-23-8B`    |
+| `LLaMAX/LLaMAX3-8B`       | `llamax3-8B`   |
 
 ### Watermark Methods
 
-| Method | Parameters |
-|---|---|
-| **KGW** | γ=0.25, δ=2.0, minhash seeding |
+| Method    | Parameters                                                       |
+| --------- | ---------------------------------------------------------------- |
+| **KGW**   | γ=0.25, δ=2.0, minhash seeding                                   |
 | **X-SIR** | window=5, chunk=10, δ=1.0, paraphrase-multilingual-mpnet-base-v2 |
-| **X-KGW** | KGW + semantic clustering, context width=1 |
+| **X-KGW** | KGW + semantic clustering, context width=1                       |
 
 ### STEAM Parameters
 
-| Parameter | Value |
-|---|---|
-| Candidate languages | 133 |
-| Feature dimensions | 131 (103 syntax_knn + 28 phonology_knn) |
-| Initial random evaluations | 3 |
-| Max BO iterations | 17 |
-| Total budget per text | 20 |
-| Validation texts per language | 500 |
-| Surrogate model | SingleTaskGP (BoTorch) |
-| Acquisition function | LogExpectedImprovement |
+| Parameter                     | Value                                   |
+| ----------------------------- | --------------------------------------- |
+| Candidate languages           | 133                                     |
+| Feature dimensions            | 131 (103 syntax_knn + 28 phonology_knn) |
+| Initial random evaluations    | 3                                       |
+| Max BO iterations             | 17                                      |
+| Total budget per text         | 20                                      |
+| Validation texts per language | 500                                     |
+| Surrogate model               | SingleTaskGP (BoTorch)                  |
+| Acquisition function          | LogExpectedImprovement                  |
 
 Settings can be modified in `evaluation/common/config.sh`, `evaluation/common/languages.sh`, and `evaluation/common/utils.sh`.
 
