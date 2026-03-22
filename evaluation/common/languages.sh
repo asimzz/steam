@@ -28,5 +28,19 @@ NEW_SUPPORTED_LANGS=(
 # Original supported languages
 ORIGINAL_SUPPORTED_LANGS=("fr" "de" "zh" "ja")
 
+# Attacker-defender experiment languages
+ATTACKER_DEFENDER_LANGS=(
+    "de" # German (high-resource)
+    "hi" # Hindi (medium-resource)
+    "iw" # Hebrew (low-resource)
+)
+
+# Pivot languages for multi-step translation attack experiment
+PIVOT_LANGS=(
+    "de" # German (high-resource)
+    "ko" # Korean (medium-resource)
+    "bn" # Bengali (low-resource)
+)
+
 # Unsupported languages for cross-lingual evaluation
 UNSUPPORTED_LANGS=("it" "es" "pt" "pl" "nl" "hr" "cs" "da" "ko")
