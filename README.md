@@ -235,13 +235,13 @@ bash evaluation/scripts/evaluate_detection_translate.sh new_supported
 
 ### Categories
 
-| Category             | Languages                                                                         | Description                                                   |
-| -------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| `new_supported`      | 17 languages (fr, de, it, es, pt, pl, nl, ru, hi, ko, ja, bn, fa, vi, iw, uk, ta) | Main evaluation set spanning high-, medium-, and low-resource |
-| `original_supported` | en, fr, de, zh, ja                                                                | Original X-SIR supported languages                            |
-| `unsupported`        | it, es, pt, pl, nl, hr, cs, da, ko                                                | Languages not in semantic clustering dictionaries             |
-| `attacker_defender`  | de, hi, iw                                                                        | Translator mismatch experiment (high, medium, low resource)   |
-| `pivot`              | de, ko, bn                                                                        | Multi-step pivot attack languages (high, medium, low resource)|
+| Category             | Languages                                                                         | Description                                                    |
+| -------------------- | --------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| `new_supported`      | 17 languages (fr, de, it, es, pt, pl, nl, ru, hi, ko, ja, bn, fa, vi, iw, uk, ta) | Main evaluation set spanning high-, medium-, and low-resource  |
+| `original_supported` | en, fr, de, zh, ja                                                                | Original X-SIR supported languages                             |
+| `unsupported`        | it, es, pt, pl, nl, hr, cs, da, ko                                                | Languages not in semantic clustering dictionaries              |
+| `attacker_defender`  | de, hi, iw                                                                        | Translator mismatch experiment (high, medium, low resource)    |
+| `pivot`              | de, ko, bn                                                                        | Multi-step pivot attack languages (high, medium, low resource) |
 
 Languages for each category are configured in `evaluation/common/languages.sh`.
 
@@ -347,8 +347,6 @@ bash evaluation/scripts/eval_length_classification.sh
 | Validation texts per language | 500                                     |
 | Surrogate model               | SingleTaskGP (BoTorch)                  |
 | Acquisition function          | LogExpectedImprovement                  |
-
-Settings can be modified in `evaluation/common/config.sh`, `evaluation/common/languages.sh`, and `evaluation/common/utils.sh`.
 
 ---
 
