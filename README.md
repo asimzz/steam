@@ -24,6 +24,11 @@ The work was supported by [Parameter Lab](https://parameterlab.de), which provid
 - [Key Results](#key-results)
 - [Installation](#installation)
 - [Code Structure](#code-structure)
+- [Core Components](#core-components)
+  - [1. Text Generation (`gen.py`)](#1-text-generation-genpy-)
+  - [2. Watermark Detection (`detect.py`)](#2-watermark-detection-detectpy)
+  - [3. Evaluation (`eval_detection.py`)](#3-evaluation-eval_detectionpy)
+  - [4. STEAM Module (`steam/`)](#4-steam-module-steam)
 - [Basic Workflow](#basic-workflow)
   - [Categories](#categories)
 - [STEAM Detection](#steam-detection)
@@ -34,11 +39,6 @@ The work was supported by [Parameter Lab](https://parameterlab.de), which provid
   - [Attacker-Defender Pairs](#attacker-defender-pairs)
   - [Multi-Step Pivot Attacks](#multi-step-pivot-attacks)
   - [Text Length Analysis](#text-length-analysis)
-- [Core Components](#core-components)
-  - [1. Text Generation (`gen.py`)](#1-text-generation-genpy-)
-  - [2. Watermark Detection (`detect.py`)](#2-watermark-detection-detectpy)
-  - [3. Evaluation (`eval_detection.py`)](#3-evaluation-eval_detectionpy)
-  - [4. STEAM Module (`steam/`)](#4-steam-module-steam)
 - [Configuration](#configuration)
 - [Cite](#cite)
 
@@ -148,6 +148,71 @@ STEAM/
 
 ---
 
+## Core Components
+
+### 1. Text Generation (`gen.py`)
+
+Generates watermarked or baseline text from prompts.
+
+```bash
+python gen.py \
+  --base_model meta-llama/Llama-3.2-1B \
+  --input_file data/dataset/mc4.en.jsonl \
+  --output_file evaluation/gen/llama-3.2-1B/new_supported/xsir_seed0/mc4.en.mod.jsonl \
+  --watermark_method xsir \
+  --watermark_type context \
+  --mapping_file data/mapping/xsir/new_supported/mapping.json \
+  --transform_model data/model/transform_model_x-sbert.pth
+```
+
+**Key Arguments**
+
+- `--watermark_method`: `xsir`, `xkgw`, `kgw`, or `none`
+- `--mapping_file`: Required for X-SIR and X-KGW methods
+
+### 2. Watermark Detection (`detect.py`)
+
+Computes z-scores for baseline watermark detection.
+
+```bash
+python detect.py \
+  --base_model meta-llama/Llama-3.2-1B \
+  --detect_file evaluation/gen/llama-3.2-1B/new_supported/xsir_seed0/mc4.en-fr.mod.jsonl \
+  --output_file evaluation/gen/llama-3.2-1B/new_supported/xsir_seed0/mc4.en-fr.mod.z_score.jsonl \
+  --watermark_method xsir \
+  --watermark_type context \
+  --mapping_file data/mapping/xsir/new_supported/mapping.json \
+  --transform_model data/model/transform_model_x-sbert.pth
+```
+
+### 3. Evaluation (`eval_detection.py`)
+
+Computes detection performance metrics including **AUC**, **TPR@FPR**, **F1**, and **ROC curves**.
+
+```bash
+python evaluation/eval_detection.py \
+  --hm_zscore evaluation/gen/llama-3.2-1B/new_supported/xsir_seed0/mc4.en-fr.hum.z_score.jsonl \
+  --wm_zscore evaluation/gen/llama-3.2-1B/new_supported/xsir_seed0/mc4.en-fr.mod.z_score.jsonl
+```
+
+### 4. STEAM Module (`steam/`)
+
+The STEAM detection module. Contains the Bayesian Optimisation detector and all supporting components.
+
+| File                                   | Description                                                                          |
+| -------------------------------------- | ------------------------------------------------------------------------------------ |
+| `detector.py`                          | Main STEAM detector — runs per-text BO to find the best back-translation language    |
+| `bayesian_optimization.py`             | BO engine using SingleTaskGP surrogate and LogExpectedImprovement acquisition        |
+| `language_features.py`                 | Retrieves 131-D feature vectors (syntax_knn + phonology_knn) from URIEL via lang2vec |
+| `language_codes.py`                    | ISO 639-1 ↔ ISO 639-3 bidirectional conversion for ~90 languages                     |
+| `compute_gamma_lang.py`                | Computes per-language empirical γ_ℓ from 500 human-written validation texts          |
+| `back_translation_languages.txt`       | List of 133 candidate probe languages for back-translation                           |
+| `realtime_backtranslation.py`          | Google Translate wrapper with caching and rate limiting                              |
+| `realtime_deepseek_backtranslation.py` | DeepSeek API translator (drop-in replacement)                                        |
+| `realtime_openai_backtranslation.py`   | GPT-4o-mini translator (drop-in replacement)                                         |
+
+---
+
 ## Basic Workflow
 
 The baseline watermarking pipeline (without STEAM):
@@ -249,71 +314,6 @@ Analyses watermark detection across text length bins (short, medium, long by per
 ```bash
 bash evaluation/scripts/eval_length_classification.sh
 ```
-
----
-
-## Core Components
-
-### 1. Text Generation (`gen.py`)
-
-Generates watermarked or baseline text from prompts.
-
-```bash
-python gen.py \
-  --base_model meta-llama/Llama-3.2-1B \
-  --input_file data/dataset/mc4.en.jsonl \
-  --output_file evaluation/gen/llama-3.2-1B/new_supported/xsir_seed0/mc4.en.mod.jsonl \
-  --watermark_method xsir \
-  --watermark_type context \
-  --mapping_file data/mapping/xsir/new_supported/mapping.json \
-  --transform_model data/model/transform_model_x-sbert.pth
-```
-
-**Key Arguments**
-
-- `--watermark_method`: `xsir`, `xkgw`, `kgw`, or `none`
-- `--mapping_file`: Required for X-SIR and X-KGW methods
-
-### 2. Watermark Detection (`detect.py`)
-
-Computes z-scores for baseline watermark detection.
-
-```bash
-python detect.py \
-  --base_model meta-llama/Llama-3.2-1B \
-  --detect_file evaluation/gen/llama-3.2-1B/new_supported/xsir_seed0/mc4.en-fr.mod.jsonl \
-  --output_file evaluation/gen/llama-3.2-1B/new_supported/xsir_seed0/mc4.en-fr.mod.z_score.jsonl \
-  --watermark_method xsir \
-  --watermark_type context \
-  --mapping_file data/mapping/xsir/new_supported/mapping.json \
-  --transform_model data/model/transform_model_x-sbert.pth
-```
-
-### 3. Evaluation (`eval_detection.py`)
-
-Computes detection performance metrics including **AUC**, **TPR@FPR**, **F1**, and **ROC curves**.
-
-```bash
-python evaluation/eval_detection.py \
-  --hm_zscore evaluation/gen/llama-3.2-1B/new_supported/xsir_seed0/mc4.en-fr.hum.z_score.jsonl \
-  --wm_zscore evaluation/gen/llama-3.2-1B/new_supported/xsir_seed0/mc4.en-fr.mod.z_score.jsonl
-```
-
-### 4. STEAM Module (`steam/`)
-
-The STEAM detection module. Contains the Bayesian Optimisation detector and all supporting components.
-
-| File                                   | Description                                                                          |
-| -------------------------------------- | ------------------------------------------------------------------------------------ |
-| `detector.py`                          | Main STEAM detector — runs per-text BO to find the best back-translation language    |
-| `bayesian_optimization.py`             | BO engine using SingleTaskGP surrogate and LogExpectedImprovement acquisition        |
-| `language_features.py`                 | Retrieves 131-D feature vectors (syntax_knn + phonology_knn) from URIEL via lang2vec |
-| `language_codes.py`                    | ISO 639-1 ↔ ISO 639-3 bidirectional conversion for ~90 languages                     |
-| `compute_gamma_lang.py`                | Computes per-language empirical γ_ℓ from 500 human-written validation texts          |
-| `back_translation_languages.txt`       | List of 133 candidate probe languages for back-translation                           |
-| `realtime_backtranslation.py`          | Google Translate wrapper with caching and rate limiting                              |
-| `realtime_deepseek_backtranslation.py` | DeepSeek API translator (drop-in replacement)                                        |
-| `realtime_openai_backtranslation.py`   | GPT-4o-mini translator (drop-in replacement)                                         |
 
 ---
 
