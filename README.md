@@ -355,10 +355,10 @@ bash evaluation/scripts/eval_length_classification.sh
 If you find our work useful, please consider citing it:
 
 ```bibtex
-@misc{mohamed2025multilingualllmwatermarkingtruly,
+@misc{mohamed2026multilingualllmwatermarkingtruly,
       title={Is Multilingual LLM Watermarking Truly Multilingual? Scaling Robustness to 100+ Languages via Back-Translation},
       author={Asim Mohamed and Martin Gubri},
-      year={2025},
+      year={2026},
       eprint={2510.18019},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
